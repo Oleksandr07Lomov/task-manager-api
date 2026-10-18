@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TASKER | Космический менеджер задач</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="theme-earth">
+
+    <div class="lang-switcher glass-pill">
+        <i class="fa-solid fa-globe lang-icon"></i>
+        <button type="button" class="lang-btn" data-lang="en">EN</button>
+        <button type="button" class="lang-btn" data-lang="uk">UK</button>
+        <button type="button" class="lang-btn active" data-lang="ru">RU</button>
+    </div>
+
+    <div id="auth-section" class="auth-container glass-card-neon">
+        <div class="logo-box center">
+            <div class="logo-shield"><i class="fa-solid fa-check"></i></div>
+            <h1 class="logo-text">TASKER</h1>
+        </div>
+        <p class="subtitle" data-i18n="appSubtitle">Космический менеджер задач</p>
+
+        <div class="auth-tabs">
+            <button type="button" id="tab-login" class="auth-tab active" data-i18n="tabLogin">Вход</button>
+            <button type="button" id="tab-register" class="auth-tab" data-i18n="tabRegister">Регистрация</button>
+        </div>
+
+        <h2 id="auth-title" data-i18n="welcomeTitle">С возвращением!</h2>
+        <p class="auth-subtitle" id="auth-subtitle-text" data-i18n="welcomeSub">Войдите на орбиту своих задач</p>
+
+        <div id="auth-error" class="alert error hidden"></div>
+        <div id="auth-success" class="alert success hidden"></div>
+
+        <form id="auth-form">
+            <div class="input-group">
+                <label data-i18n="emailLabel">Электронная почта</label>
+                <div class="input-wrapper">
+                    <i class="fa-regular fa-user left-icon"></i>
+                    <input type="email" id="email" placeholder="testemail@gmail.com" required>
+                    <i class="fa-solid fa-check right-icon check-mark"></i>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label data-i18n="passwordLabel">Пароль</label>
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-lock left-icon"></i>
+                    <input type="password" id="password" placeholder="••••••••••" required>
+                    <i class="fa-regular fa-eye-slash right-icon clickable" id="toggle-pwd"></i>
+                </div>
+            </div>
+
+            <div class="auth-options">
+                <label class="remember-me">
+                    <input type="checkbox" checked> <span data-i18n="rememberMe">Запомнить меня</span>
+                </label>
+                <a href="#" class="forgot-link" id="forgot-pwd-link" data-i18n="forgotPwd">Забыли пароль?</a>
+            </div>
+
+            <button type="submit" id="auth-submit-btn" class="glow-button full-width">
+                <span id="auth-btn-text" data-i18n="loginBtn">Войти</span>
+                <i class="fa-solid fa-arrow-right-to-bracket"></i>
+            </button>
+        </form>
+
+        <p class="switch-text">
+            <span id="switch-prompt" data-i18n="noAccount">Нет аккаунта?</span>
+            <a href="#" id="switch-mode" data-i18n="registerLink">Зарегистрироваться</a>
+        </p>
+    </div>
+
+    <div id="verify-section" class="auth-container glass-card-neon hidden">
+        <div class="logo-box center">
+            <div class="logo-shield"><i class="fa-solid fa-envelope-circle-check"></i></div>
+            <h1 class="logo-text">TASKER</h1>
+        </div>
+        <h2 style="margin-top: 10px;" data-i18n="verifyTitle">Проверьте почту!</h2>
+        <p class="auth-subtitle">
+            <span data-i18n="verifySub">Мы отправили 6-значный код на</span><br>
+            <strong id="verify-email-display" style="color: #38bdf8;"></strong>
+        </p>
+
+        <div id="verify-error" class="alert error hidden"></div>
+
+        <form id="verify-form">
+            <div class="input-group" style="margin-top: 18px;">
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-key left-icon"></i>
+                    <input type="text" id="verification-code" placeholder="123456" maxlength="6" required class="pin-input">
+                </div>
+            </div>
+            <button type="submit" id="verify-submit-btn" class="glow-button full-width" style="margin-top: 16px;">
+                <span data-i18n="verifyBtn">Подтвердить код</span>
+                <i class="fa-solid fa-rocket"></i>
+            </button>
+        </form>
+
+        <p class="switch-text">
+            <a href="#" id="back-to-login" data-i18n="backToLogin">← Вернуться ко входу</a>
+        </p>
+    </div>
+
+    <div id="tasks-section" class="app-layout hidden">
+        <aside class="sidebar glass-panel">
+            <div class="sidebar-header">
+                <div class="logo-box">
+                    <div class="logo-shield small" id="sidebar-logo-icon"><i class="fa-solid fa-check"></i></div>
+                    <h2 class="logo-text">TASKER</h2>
+                </div>
+                <i class="fa-solid fa-ringed-planet planet-decor"></i>
+            </div>
+
+            <nav class="main-nav">
+                <a href="#" class="nav-item active" data-view="tasks">
+                    <i class="fa-solid fa-list-check"></i> <span data-i18n="navTasks">Мои задачи</span>
+                </a>
+                <a href="#" class="nav-item" data-view="calendar">
+                    <i class="fa-regular fa-calendar-days"></i> <span data-i18n="navCalendar">Календарь</span>
+                </a>
+                <a href="#" class="nav-item" data-view="stats">
+                    <i class="fa-solid fa-chart-column"></i> <span data-i18n="navStats">Статистика</span>
+                </a>
+            </nav>
+
+            <div class="user-profile glass-card-mini">
+                <div class="user-row">
+                    <div class="avatar-circle"><i class="fa-solid fa-user"></i></div>
+                    <span id="user-email-display" class="user-email">testemail@gmail.com</span>
+                    <button id="delete-account-btn" title="Удалить аккаунт" class="user-action-btn delete-acc-icon">
+                        <i class="fa-regular fa-trash-can"></i>
+                    </button>
+                    <button id="logout-btn" title="Выйти" class="user-action-btn logout-icon">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    </button>
+                </div>
+                <div class="api-status">
+                    <span class="status-dot"></span> <span data-i18n="apiConnected">Подключено к API</span>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <section id="view-tasks" class="view-section">
+                <header class="top-header">
+                    <div class="title-with-badge">
+                        <i class="fa-solid fa-rocket header-icon-purple"></i>
+                        <h1 data-i18n="navTasks">Мои задачи</h1>
+                        <div class="api-badge">
+                            <span class="status-dot"></span> <span data-i18n="apiConnected">Подключено к API</span>
+                        </div>
+                    </div>
+                </header>
+
+                <form id="task-form" class="task-input-box glass-panel">
+                    <div class="task-inputs">
+                        <input type="text" id="task-title" data-i18n-placeholder="taskTitlePh" placeholder="Что нужно сделать..." minlength="3" maxlength="50" required class="input-main">
+                        <div class="input-divider"></div>
+                        <input type="text" id="task-desc" data-i18n-placeholder="taskDescPh" placeholder="Описание..." maxlength="200" class="input-sub">
+                    </div>
+                    <button type="submit" class="glow-button add-task-btn">
+                        <i class="fa-solid fa-plus"></i> <span data-i18n="addBtn">Добавить</span>
+                    </button>
+                </form>
+
+                <div id="tasks-list" class="tasks-list"></div>
+            </section>
+
+            <section id="view-calendar" class="view-section hidden">
+                <header class="top-header calendar-top">
+                    <div>
+                        <h1 data-i18n="navCalendar">Календарь</h1>
+                        <div class="month-bar">
+                            <i class="fa-solid fa-sun sun-spin"></i>
+                            <span id="cal-month-year" class="month-label">Октябрь 2026</span>
+                            <div class="cal-arrows">
+                                <button type="button" class="arrow-btn" id="prev-month"><i class="fa-solid fa-chevron-left"></i></button>
+                                <button type="button" class="arrow-btn" id="next-month"><i class="fa-solid fa-chevron-right"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="solar-button" id="cal-add-btn">
+                        <i class="fa-solid fa-plus"></i> <span data-i18n="addBtn">Добавить</span>
+                    </button>
+                </header>
+
+                <div class="calendar-board glass-panel solar-border">
+                    <div class="calendar-weekdays" id="cal-weekdays">
+                        <div>Пн</div><div>Вт</div><div>Ср</div><div>Чт</div><div>Пт</div><div>Сб</div><div>Вс</div>
+                    </div>
+                    <div id="calendar-grid" class="calendar-grid"></div>
+                </div>
+            </section>
+
+            <section id="view-stats" class="view-section hidden">
+                <header class="top-header stats-top">
+                    <div class="stats-title-group">
+                        <div class="stats-icon-box"><i class="fa-solid fa-chart-simple"></i></div>
+                        <div>
+                            <h1 data-i18n="navStats">Статистика</h1>
+                            <p class="stats-sub" data-i18n="statsSubtitle">Обзор вашей продуктивности</p>
+                        </div>
+                    </div>
+                    <div class="stats-filters">
+                        <span class="filter-pill" data-i18n="oct2026">Октябрь 2026</span>
+                        <span class="filter-pill"><span data-i18n="perMonth">За месяц</span> <i class="fa-solid fa-chevron-down"></i></span>
+                    </div>
+                </header>
+
+                <div class="stats-kpi-grid">
+                    <div class="kpi-card glass-panel">
+                        <i class="fa-solid fa-border-all kpi-icon-purple"></i>
+                        <span data-i18n="kpiTotal">Всего задач:</span> <strong id="stat-total">0</strong>
+                    </div>
+                    <div class="kpi-card glass-panel kpi-green">
+                        <span class="neon-circle green"></span>
+                        <span data-i18n="kpiDone">Выполнено:</span> <strong id="stat-done">0</strong>
+                    </div>
+                    <div class="kpi-card glass-panel kpi-blue">
+                        <span class="neon-circle blue"></span>
+                        <span data-i18n="kpiProgress">В процессе:</span> <strong id="stat-progress">0</strong>
+                    </div>
+                    <div class="kpi-card glass-panel kpi-red">
+                        <span class="neon-circle red"></span>
+                        <span data-i18n="kpiOverdue">Просрочено:</span> <strong id="stat-overdue">0</strong>
+                    </div>
+                </div>
+
+                <div class="stats-middle-grid">
+                    <div class="chart-card glass-panel">
+                        <svg viewBox="0 0 500 220" class="wave-svg">
+                            <defs>
+                                <linearGradient id="gradCyan" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.45"/>
+                                    <stop offset="100%" stop-color="#22d3ee" stop-opacity="0.0"/>
+                                </linearGradient>
+                                <linearGradient id="gradPink" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="0%" stop-color="#e879f9" stop-opacity="0.4"/>
+                                    <stop offset="100%" stop-color="#e879f9" stop-opacity="0.0"/>
+                                </linearGradient>
+                            </defs>
+                            <line x1="30" y1="40" x2="480" y2="40" stroke="rgba(255,255,255,0.07)" />
+                            <line x1="30" y1="90" x2="480" y2="90" stroke="rgba(255,255,255,0.07)" />
+                            <line x1="30" y1="140" x2="480" y2="140" stroke="rgba(255,255,255,0.07)" />
+                            <path d="M30,170 C90,70 130,70 180,120 C230,170 270,150 320,115 C370,80 420,110 470,140 L470,190 L30,190 Z" fill="url(#gradPink)"/>
+                            <path d="M30,170 C90,70 130,70 180,120 C230,170 270,150 320,115 C370,80 420,110 470,140" fill="none" stroke="#e879f9" stroke-width="3"/>
+                            <path d="M30,180 C90,150 140,160 190,155 C240,150 280,85 330,75 C380,65 420,55 470,35 L470,190 L30,190 Z" fill="url(#gradCyan)"/>
+                            <path d="M30,180 C90,150 140,160 190,155 C240,150 280,85 330,75 C380,65 420,55 470,35" fill="none" stroke="#22d3ee" stroke-width="3"/>
+                            <circle cx="110" cy="92" r="4" fill="#fff" stroke="#e879f9" stroke-width="3"/>
+                            <circle cx="180" cy="120" r="4" fill="#fff" stroke="#e879f9" stroke-width="3"/>
+                            <circle cx="330" cy="75" r="4" fill="#fff" stroke="#22d3ee" stroke-width="3"/>
+                            <circle cx="400" cy="60" r="4" fill="#fff" stroke="#22d3ee" stroke-width="3"/>
+                        </svg>
+                        <div class="chart-days" id="stats-weekdays">
+                            <span>Пн</span><span>Вт</span><span>Ср</span><span>Чт</span><span>Пт</span><span>Сб</span><span>Вс</span>
+                        </div>
+                    </div>
+
+                    <div class="rings-card glass-panel">
+                        <div class="main-ring-box">
+                            <svg viewBox="0 0 160 160" class="ring-svg">
+                                <circle cx="80" cy="80" r="64" class="ring-track"/>
+                                <circle cx="80" cy="80" r="64" class="ring-fill" id="ring-circle"/>
+                            </svg>
+                            <div class="ring-center-text">
+                                <strong id="stat-percent">0%</strong>
+                                <span data-i18n="completedWord">выполнено</span>
+                            </div>
+                        </div>
+                        <div class="side-rings">
+                            <div class="mini-ring">
+                                <svg viewBox="0 0 80 80">
+                                    <circle cx="40" cy="40" r="30" class="ring-track-sm"/>
+                                    <circle cx="40" cy="40" r="30" class="ring-fill-sm"/>
+                                </svg>
+                            </div>
+                            <div class="hud-circle">
+                                <i class="fa-solid fa-bullseye"></i>
+                            </div>
+                            <span class="eff-label" data-i18n="efficiency">Эффективность</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="activity-card glass-panel">
+                    <h3 data-i18n="activityTitle">Активность по категориям</h3>
+                    <div class="bar-row">
+                        <span class="bar-label" data-i18n="barTotal">Всего задач</span>
+                        <div class="bar-track"><div class="bar-fill grad-purple-cyan" id="bar-total" style="width: 100%;"></div></div>
+                    </div>
+                    <div class="bar-row">
+                        <span class="bar-label" data-i18n="barDone">Выполнено</span>
+                        <div class="bar-track"><div class="bar-fill grad-cyan" id="bar-done" style="width: 70%;"></div></div>
+                    </div>
+                    <div class="bar-row">
+                        <span class="bar-label" data-i18n="barProgress">В процессе</span>
+                        <div class="bar-track"><div class="bar-fill grad-blue" id="bar-progress" style="width: 30%;"></div></div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html
